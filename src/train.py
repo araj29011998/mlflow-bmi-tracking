@@ -58,8 +58,9 @@ for model_name, model in models.items():
 
         # ✅ Use RELATIVE path to avoid '/C:' errors in GitHub runners
         #mlflow.log_artifact(local_path=model_path, artifact_path="model-artifacts")
-        mlflow.log_artifact("models/" + model_name + ".pkl")
-
+        model_path = os.path.join("models", f"{model_name}.pkl")
+        joblib.dump(model, model_path)
+        mlflow.log_artifact(model_path)
         # Check for best
         if mae < best_mae:
             best_mae = mae
