@@ -29,6 +29,9 @@ best_model = None
 best_model_name = None
 best_mae = float('inf')
 
+# Ensure 'temp_models' folder is clean and created
+os.makedirs("temp_models", exist_ok=True)
+
 for model_name, model in models.items():
     with mlflow.start_run(run_name=model_name) as run:
         model.fit(X_train, y_train)
@@ -45,20 +48,20 @@ for model_name, model in models.items():
         mlflow.log_metric("mae", mae)
         mlflow.log_metric("r2", r2)
 
-        # Save model directly inside run folder
-        artifact_dir = mlflow.get_artifact_uri()
-        save_path = os.path.join("temp_model.pkl")  # local safe path
-        joblib.dump(model, save_path)
+        # ✅ Save model to a RELATIVE path
+        local_model_path = os.path.join("temp_models", f"{model_name}.pkl")
+        joblib.dump(model, local_model_path)
 
-        # Log artifact safely — relative to working directory
-        mlflow.log_artifact(save_path)
+        # ✅ Log artifact using RELATIVE path (required on GitHub Actions)
+        mlflow.log_artifact(local_model_path)
 
+        # Track best model
         if mae < best_mae:
             best_mae = mae
             best_model = model
             best_model_name = model_name
 
-# Register the best model
+# ✅ Register best model
 with mlflow.start_run(run_name=f"{best_model_name}_Registration"):
     mlflow.log_param("best_model", best_model_name)
     mlflow.sklearn.log_model(
