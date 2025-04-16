@@ -53,7 +53,8 @@ for model_name, model in models.items():
         os.makedirs("models", exist_ok=True)
         model_path = f"models/{model_name}.pkl"
         joblib.dump(model, model_path)
-        mlflow.log_artifact(model_path)
+        mlflow.log_artifact("models/model.pkl", artifact_path="model-artifacts")
+
 
         # Track best
         if mae < best_mae:
