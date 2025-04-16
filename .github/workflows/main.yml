@@ -1,12 +1,15 @@
-name: CI-CD Pipeline
+name: build-and-train
 
 on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build-and-train:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,12 +25,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install scikit-learn pandas joblib
 
       - name: Run training script
         run: python src/train.py
 
-      - name: Upload trained model artifact
+      - name: Upload trained model
         uses: actions/upload-artifact@v3
         with:
-          name: model
+          name: trained-model
           path: models/model.pkl
