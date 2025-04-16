@@ -27,14 +27,14 @@ models = {
 # Set experiment
 mlflow.set_experiment("BMI_Prediction_Experiment")
 
-# Create models directory once
-model_dir = os.path.join("models")
-os.makedirs(model_dir, exist_ok=True)
-
-# To track the best model
+# Track best model
 best_model_name = None
 best_model = None
-best_mae = float('inf')  # Lower is better
+best_mae = float('inf')
+
+# Use relative and Linux-compatible path
+model_dir = "models"
+os.makedirs(model_dir, exist_ok=True)
 
 for model_name, model in models.items():
     with mlflow.start_run(run_name=model_name):
@@ -46,23 +46,20 @@ for model_name, model in models.items():
         mae = mean_absolute_error(y_test, preds)
         r2 = r2_score(y_test, preds)
 
-        # Log metrics
+        # Log everything
         mlflow.log_param("model", model_name)
         mlflow.log_param("version", "v1")
         mlflow.log_metric("rmse", rmse)
         mlflow.log_metric("mae", mae)
         mlflow.log_metric("r2", r2)
 
-        # Save model inside current working dir (GitHub Actions safe)
-        model_filename = f"{model_name}.pkl"
-        model_path = os.path.join("models", model_filename)
+        model_path = os.path.join(model_dir, f"{model_name}.pkl")
         joblib.dump(model, model_path)
 
-        # log_artifact expects a relative local path, not absolute with C:\
+        # ✅ Use RELATIVE path to avoid '/C:' errors in GitHub runners
         mlflow.log_artifact(local_path=model_path, artifact_path="model-artifacts")
 
-
-        # Track best model
+        # Check for best
         if mae < best_mae:
             best_mae = mae
             best_model = model
