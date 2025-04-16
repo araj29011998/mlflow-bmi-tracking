@@ -7,7 +7,6 @@ import mlflow.sklearn
 import pandas as pd
 import joblib
 import os
-import tempfile
 
 # Load data
 train = pd.read_csv("data/train.csv")
@@ -18,23 +17,20 @@ y_train = train["BMI"]
 X_test = test.drop(columns=["BMI"])
 y_test = test["BMI"]
 
-# Model dictionary
 models = {
     "LinearRegression": LinearRegression(),
     "DecisionTree": DecisionTreeRegressor(max_depth=5),
     "RandomForest": RandomForestRegressor()
 }
 
-# Set experiment
 mlflow.set_experiment("BMI_Prediction_Experiment")
 
-# Track best model
-best_model_name = None
 best_model = None
+best_model_name = None
 best_mae = float('inf')
 
 for model_name, model in models.items():
-    with mlflow.start_run(run_name=model_name):
+    with mlflow.start_run(run_name=model_name) as run:
         model.fit(X_train, y_train)
         preds = model.predict(X_test)
 
@@ -43,20 +39,20 @@ for model_name, model in models.items():
         mae = mean_absolute_error(y_test, preds)
         r2 = r2_score(y_test, preds)
 
-        # Log everything
         mlflow.log_param("model", model_name)
         mlflow.log_param("version", "v1")
         mlflow.log_metric("rmse", rmse)
         mlflow.log_metric("mae", mae)
         mlflow.log_metric("r2", r2)
 
-        # ✅ Save to temp directory and log artifact safely
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            model_path = os.path.join(tmp_dir, f"{model_name}.pkl")
-            joblib.dump(model, model_path)
-            mlflow.log_artifact(model_path)
+        # Save model directly inside run folder
+        artifact_dir = mlflow.get_artifact_uri()
+        save_path = os.path.join("temp_model.pkl")  # local safe path
+        joblib.dump(model, save_path)
 
-        # Track best
+        # Log artifact safely — relative to working directory
+        mlflow.log_artifact(save_path)
+
         if mae < best_mae:
             best_mae = mae
             best_model = model
