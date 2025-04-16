@@ -7,6 +7,7 @@ import mlflow.sklearn
 import pandas as pd
 import joblib
 import os
+import tempfile
 
 # Load data
 train = pd.read_csv("data/train.csv")
@@ -32,10 +33,6 @@ best_model_name = None
 best_model = None
 best_mae = float('inf')
 
-# Use relative and Linux-compatible path
-model_dir = "models"
-os.makedirs(model_dir, exist_ok=True)
-
 for model_name, model in models.items():
     with mlflow.start_run(run_name=model_name):
         model.fit(X_train, y_train)
@@ -53,15 +50,13 @@ for model_name, model in models.items():
         mlflow.log_metric("mae", mae)
         mlflow.log_metric("r2", r2)
 
-        model_path = os.path.join(model_dir, f"{model_name}.pkl")
-        joblib.dump(model, model_path)
+        # ✅ Save to temp directory and log artifact safely
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            model_path = os.path.join(tmp_dir, f"{model_name}.pkl")
+            joblib.dump(model, model_path)
+            mlflow.log_artifact(model_path)
 
-        # ✅ Use RELATIVE path to avoid '/C:' errors in GitHub runners
-        #mlflow.log_artifact(local_path=model_path, artifact_path="model-artifacts")
-        model_path = os.path.join("models", f"{model_name}.pkl")
-        joblib.dump(model, model_path)
-        mlflow.log_artifact(model_path)
-        # Check for best
+        # Track best
         if mae < best_mae:
             best_mae = mae
             best_model = model
