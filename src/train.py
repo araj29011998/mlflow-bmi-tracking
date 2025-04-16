@@ -27,6 +27,10 @@ models = {
 # Set experiment
 mlflow.set_experiment("BMI_Prediction_Experiment")
 
+# Create models directory once
+model_dir = os.path.join("models")
+os.makedirs(model_dir, exist_ok=True)
+
 # To track the best model
 best_model_name = None
 best_model = None
@@ -44,26 +48,24 @@ for model_name, model in models.items():
 
         # Log metrics
         mlflow.log_param("model", model_name)
+        mlflow.log_param("version", "v1")
         mlflow.log_metric("rmse", rmse)
         mlflow.log_metric("mae", mae)
         mlflow.log_metric("r2", r2)
-        mlflow.log_param("version", "v1")
 
-        # Save locally
-        os.makedirs("models", exist_ok=True)
-        model_path = f"models/{model_name}.pkl"
+        # Save locally and log artifact
+        model_path = os.path.join(model_dir, f"{model_name}.pkl")
         joblib.dump(model, model_path)
-        mlflow.log_artifact("models/model.pkl", artifact_path="model-artifacts")
+        mlflow.log_artifact(model_path, artifact_path="model-artifacts")
 
-
-        # Track best
+        # Track best model
         if mae < best_mae:
             best_mae = mae
             best_model = model
             best_model_name = model_name
 
 # Register the best model
-with mlflow.start_run(run_name=f"{best_model_name}_Registration") as run:
+with mlflow.start_run(run_name=f"{best_model_name}_Registration"):
     mlflow.log_param("best_model", best_model_name)
     mlflow.sklearn.log_model(
         best_model,
