@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/hp/Desktop/self%20learning/mlops/complete%20pipeline/3-ExperimentTracking-MLflow/mlruns/190550548149856704/decacfbc41a74b5eaecae09bb8419cf7/artifacts
+end_time: 1744371879706
+entry_point_name: ''
+experiment_id: '190550548149856704'
+lifecycle_stage: active
+run_id: decacfbc41a74b5eaecae09bb8419cf7
+run_name: RandomForest
+run_uuid: decacfbc41a74b5eaecae09bb8419cf7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1744371879115
+status: 3
+tags: []
+user_id: hp

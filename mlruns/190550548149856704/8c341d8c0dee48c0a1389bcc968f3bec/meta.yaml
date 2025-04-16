@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/hp/Desktop/self%20learning/mlops/complete%20pipeline/3-ExperimentTracking-MLflow/mlruns/190550548149856704/8c341d8c0dee48c0a1389bcc968f3bec/artifacts
+end_time: 1744253336622
+entry_point_name: ''
+experiment_id: '190550548149856704'
+lifecycle_stage: active
+run_id: 8c341d8c0dee48c0a1389bcc968f3bec
+run_name: LinearRegression
+run_uuid: 8c341d8c0dee48c0a1389bcc968f3bec
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1744253336494
+status: 3
+tags: []
+user_id: hp

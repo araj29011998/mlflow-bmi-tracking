@@ -1,0 +1,6 @@
+__pycache__/
+*.ipynb
+*.csv
+.dvc/
+.dvcstore/
+mlruns/

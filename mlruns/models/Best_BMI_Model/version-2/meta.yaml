@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1744371892368
+current_stage: None
+description: null
+last_updated_timestamp: 1744371892368
+name: Best_BMI_Model
+run_id: 6d01f9b6a66e480596dc9d9d054b65b5
+run_link: null
+source: file:///C:/Users/hp/Desktop/self%20learning/mlops/complete%20pipeline/3-ExperimentTracking-MLflow/mlruns/190550548149856704/6d01f9b6a66e480596dc9d9d054b65b5/artifacts/model
+status: READY
+status_message: null
+storage_location: file:///C:/Users/hp/Desktop/self%20learning/mlops/complete%20pipeline/3-ExperimentTracking-MLflow/mlruns/190550548149856704/6d01f9b6a66e480596dc9d9d054b65b5/artifacts/model
+user_id: null
+version: 2

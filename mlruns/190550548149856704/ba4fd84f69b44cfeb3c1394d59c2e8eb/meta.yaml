@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/hp/Desktop/self%20learning/mlops/complete%20pipeline/3-ExperimentTracking-MLflow/mlruns/190550548149856704/ba4fd84f69b44cfeb3c1394d59c2e8eb/artifacts
+end_time: 1744372059991
+entry_point_name: ''
+experiment_id: '190550548149856704'
+lifecycle_stage: active
+run_id: ba4fd84f69b44cfeb3c1394d59c2e8eb
+run_name: DecisionTree
+run_uuid: ba4fd84f69b44cfeb3c1394d59c2e8eb
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1744372059837
+status: 3
+tags: []
+user_id: hp

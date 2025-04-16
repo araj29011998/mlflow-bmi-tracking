@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+scikit-learn
+joblib
+pandas
+mlflow
+prometheus_fastapi_instrumentator
