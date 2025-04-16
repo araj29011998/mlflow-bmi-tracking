@@ -38,7 +38,7 @@ for model_name, model in models.items():
         preds = model.predict(X_test)
 
         # Metrics
-        rmse = mean_squared_error(y_test, preds, squared=False)
+        rmse = mean_squared_error(y_test, preds)
         mae = mean_absolute_error(y_test, preds)
         r2 = r2_score(y_test, preds)
 
