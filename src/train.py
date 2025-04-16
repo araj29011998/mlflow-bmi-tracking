@@ -53,10 +53,14 @@ for model_name, model in models.items():
         mlflow.log_metric("mae", mae)
         mlflow.log_metric("r2", r2)
 
-        # Save locally and log artifact
-        model_path = os.path.join(model_dir, f"{model_name}.pkl")
+        # Save model inside current working dir (GitHub Actions safe)
+        model_filename = f"{model_name}.pkl"
+        model_path = os.path.join("models", model_filename)
         joblib.dump(model, model_path)
-        mlflow.log_artifact(model_path, artifact_path="model-artifacts")
+
+        # log_artifact expects a relative local path, not absolute with C:\
+        mlflow.log_artifact(local_path=model_path, artifact_path="model-artifacts")
+
 
         # Track best model
         if mae < best_mae:
